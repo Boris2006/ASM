@@ -45,9 +45,9 @@ def main():
             choice = input("Выберите действие: ")
 
             if choice == "1":
-                username = input("Введите имя пользователя: ")
+                login = input("Введите имя пользователя: ")
                 password = input("Введите пароль: ")
-                user = user_manager.authenticate_user(username, password)
+                verify_password(login, password)
                 if user:
                     logged_in_user = user
                     print(f"Добро пожаловать, {logged_in_user.username} ({logged_in_user.role})!")
