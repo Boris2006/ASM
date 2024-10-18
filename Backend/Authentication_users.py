@@ -38,7 +38,7 @@ def add_information_login_password(login, password):
         connection.commit()
         # Закрываем курсор
         cursor.close()
-        return True
+        return True #Hi, my name is Boris
     except Exception as e:
         connection.rollback()  # Откат изменений в случае ошибки
         return False

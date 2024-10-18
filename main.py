@@ -9,7 +9,6 @@ from Backend.Authentication_users import connection_database_login_password
 from Backend.Authentication_users import add_information_login_password 
 from Backend.Authentication_users import get_information_login_password
 from Backend.Authentication_users import verify_password
-from Backend.Authentication_users import protected
 from Backend.Data_motivation import connection_database_users
 from Backend.Data_motivation import get_information_users
 from Backend.Data_motivation import add_information_users
