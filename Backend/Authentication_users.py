@@ -38,10 +38,10 @@ def add_information_login_password(login, password):
         connection.commit()
         # Закрываем курсор
         cursor.close()
-        print("Запись успешно добавлена.")
+        return True
     except Exception as e:
-        print(f"Ошибка при выполнении запроса: {e}")
         connection.rollback()  # Откат изменений в случае ошибки
+        return False
 
 
 def get_information_login_password(login):

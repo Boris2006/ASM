@@ -1,6 +1,6 @@
 import psycopg2
 
-def connection_database_users():
+def connection_database_result_rewards():
     try:
         # Замените эти параметры на ваши данные подключения
         connection = psycopg2.connect(
