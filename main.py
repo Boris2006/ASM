@@ -38,7 +38,8 @@ def main():
 
     while True:
         if logged_in_user is None:
-            print("\n1. Вход в аккаунт")
+            
+            print("1. Вход в аккаунт")
             print("2. Регистрация нового пользователя")
             print("3. Выход")
 
@@ -55,14 +56,9 @@ def main():
                     print("Неверное имя пользователя или пароль.")
 
             elif choice == "2":
-                username = input("Введите имя пользователя: ")
-                password = input("Введите пароль: ")
-                role = input("Введите должность (менеджер/руководитель): ")
-                email = input("Введите электронную почту: ")
-                salary = float(input("Введите зарплату: "))
-                
-                registration_result = user_manager.register_user(username, password, role, email, salary)
-                print(registration_result)
+                login = input ("Введите имя нового пользователя")
+                new_password = input ("Придумайте пароль")
+                add_information_login_password(login, new_password)
 
             elif choice == "3":
                 print("Выход из программы.")
@@ -74,7 +70,7 @@ def main():
         # Интерфейс для авторизованных пользователей
         else:
             print("\nМеню:")
-            if logged_in_user.role == 'руководитель':
+            if logged_in_user.role in ['руководитель', 'менеджер']:  # Позволить менеджерам видеть производительность
                 print("1. Добавить критерии мотивации")
                 print("2. Просмотреть производительность сотрудников")
                 print("3. Добавить нового сотрудника")
@@ -98,8 +94,8 @@ def main():
 
                 elif choice == "3":
                     username = input("Введите имя нового сотрудника: ")
-                    password = input("Введите пароль для нового сотрудника: ")
-                    role = 'менеджер'  # все новые сотрудники - менеджеры
+                    password = input("Введите пароль: ")
+                    role = input("Введите должность (менеджер/руководитель): ")
                     email = input("Введите электронную почту: ")
                     salary = float(input("Введите зарплату: "))
                     
@@ -107,33 +103,11 @@ def main():
                     print(registration_result)
 
                 elif choice == "4":
-                    print("Выход из программы.")
-                    break
+                    print("Выход из меню.")
+                    logged_in_user = None
 
                 else:
                     print("Некорректный выбор. Пожалуйста, попробуйте еще раз.")
-
-            elif logged_in_user.role == 'менеджер':
-                print("1. Добавить данные о производительности")
-                print("2. Выход")
-
-                choice = input("Выберите действие: ")
-
-                if choice == "1":
-                    employee_id = input("Введите ID сотрудника: ")
-                    amount = float(input("Введите сумму: "))
-                    date = input("Введите дату (ГГГГ-ММ-ДД): ")
-                    type_client = input("Введите тип клиента: ")
-                    performance_monitoring.add_performance_data(employee_id, amount, date, type_client)
-                    print("Данные о производительности добавлены успешно.")
-
-                elif choice == "2":
-                    print("Выход из программы.")
-                    break
-
-                else:
-                    print("Некорректный выбор. Пожалуйста, попробуйте еще раз.")
-
 
 if __name__ == "__main__":
     main()
