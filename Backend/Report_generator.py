@@ -1,6 +1,6 @@
 class ReportGenerator:
-    def generate_report(self, criteria):
-        # Логика формирования отчетов по продажам
+    def analyze_max_min_sales(self, criteria):
+        # Логика формирования результата по наибольшему объёму продаж
         pass
 
     def analyze_sales_by_product(self, products_id):

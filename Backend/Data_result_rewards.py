@@ -1,10 +1,14 @@
 import psycopg2
 
+from Backend.Data_sales import connection_database_sales
+from Backend.Data_users import get_information_users
+
+
 def connection_database_result_rewards():
     try:
         # Замените эти параметры на ваши данные подключения
         connection = psycopg2.connect(
-            dbname="result_rewards",
+            dbname="ASM",
             user="borisgostev",
             password="",
             host="localhost",
@@ -15,19 +19,26 @@ def connection_database_result_rewards():
         return connection
     except Exception as e:
         print("Ошибка при подключении к базе данных:", e)
+        return False
 
 
-def get_information_sales_volume(connection, id, start_date, end_date):
+def get_information_sales_volume(id, start_date, end_date):
+    connection = connection_database_sales()
     try:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM sales WHERE date BETWEEN %s AND %s, id = %s", (start_date, end_date, id))
+        cursor.execute("SELECT amount FROM sales WHERE date BETWEEN %s AND %s AND id = %s", (start_date, end_date, id,))
         total_sales = cursor.fetchall()
         cursor.close()
-        return total_sales
+        volume = 0
+        for sale in total_sales:
+            volume = volume + int(sale[0])
+        return volume
     except Exception as e:
         print(f"Ошибка при выполнении запроса: {e}")
+        return False
 
-def get_information_result_rewards(connection, start_date, end_date):
+def get_information_result_rewards(start_date, end_date, id):
+    connection = connection_database_result_rewards()
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM result_rewards WHERE date BETWEEN %s AND %s, id = %s", (start_date, end_date, id))
@@ -37,25 +48,28 @@ def get_information_result_rewards(connection, start_date, end_date):
     except Exception as e:
         print(f"Ошибка при выполнении запроса: {e}")
 
-def add_information_result_rewards(connection, id, total_sales, motivation_bonus, base_salary, start_date, end_date):
-        try:
-            # Создаем курсор
-            cursor = connection.cursor()
-            # SQL-запрос для вставки данных
-            insert_query = """
-            INSERT INTO result_rewards (id, total_sales, motivation_bonus, base_salary, start_date, end_date)
-            VALUES (%s, %s, %s, %s, %s, %s);
-            """
-            # Выполняем запрос с передачей параметров
-            cursor.execute(insert_query, (id, total_sales, motivation_bonus, base_salary, start_date, end_date))
-            # Зафиксировать изменения в базе данных
-            connection.commit()
-            # Закрываем курсор
-            cursor.close()
-            print("Запись успешно добавлена.")
-        except Exception as e:
-            print(f"Ошибка при выполнении запроса: {e}")
-            connection.rollback()  # Откат изменений в случае ошибки
+def add_information_result_rewards(id, motivation_bonus, start_date, end_date):
+    connection = connection_database_result_rewards()
+    try:
+        # Создаем курсор
+        cursor = connection.cursor()
+        # SQL-запрос для вставки данных
+        total_sales = get_information_sales_volume(start_date, end_date, id)
+        base_salary = get_information_users(id)[0][4]
+        insert_query = """
+        INSERT INTO result_rewards (id, total_sales, motivation_bonus, base_salary, start_date, end_date)
+        VALUES (%s, %s, %s, %s, %s, %s);
+        """
+        # Выполняем запрос с передачей параметров
+        cursor.execute(insert_query, (id, total_sales, motivation_bonus, base_salary, start_date, end_date))
+        # Зафиксировать изменения в базе данных
+        connection.commit()
+        # Закрываем курсор
+        cursor.close()
+        print("Запись успешно добавлена.")
+    except Exception as e:
+        print(f"Ошибка при выполнении запроса: {e}")
+        connection.rollback()  # Откат изменений в случае ошибки
 
 
 def show_results(bonuses):

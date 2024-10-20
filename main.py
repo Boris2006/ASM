@@ -6,7 +6,6 @@ from Frontend.Performance_monitoring import PerformanceMonitoring
 from Frontend.User import User
 from Frontend.User_manager import UserManager
 
-from Backend.Data_collector import SalesDataCollector
 from Backend.Authentication_users import connection_database_login_password 
 from Backend.Authentication_users import add_information_login_password 
 from Backend.Authentication_users import get_information_login_password
@@ -34,7 +33,9 @@ def main():
     #show_results_motivation(get_information_motivation(get_id_login_password('Boris')[0]))
     #add_information_sales(get_id_login_password('Boris')[0], 100, '11.30.2024', '001', '2')
     #add_information_sales(get_id_login_password('Boris')[0], 100, '11.01.2024', '001', '3')
-    show_results_sales(get_information_sales(get_id_login_password('Boris')[0], '11.01.2024'))
+    #show_results_sales(get_information_sales(get_id_login_password('Boris')[0], '11.01.2024'))
+    add_information_result_rewards(get_id_login_password('Boris')[0], '1000', '10.01.2024', '01.01.2025')
+    #(get_information_sales_volume(get_id_login_password('Boris')[0], '10.01.2024', '01.01.2025')
 
 
 if __name__ == "__main__":
