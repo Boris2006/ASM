@@ -26,7 +26,7 @@ def get_information_sales_volume(id, start_date, end_date):
     connection = connection_database_sales()
     try:
         cursor = connection.cursor()
-        cursor.execute("SELECT amount FROM sales WHERE date BETWEEN %s AND %s AND id = %s", (start_date, end_date, id,))
+        cursor.execute("SELECT amount FROM sales WHERE id = %s AND date BETWEEN %s AND %s", (id, start_date, end_date,))
         total_sales = cursor.fetchall()
         cursor.close()
         volume = 0
@@ -41,7 +41,7 @@ def get_information_result_rewards(start_date, end_date, id):
     connection = connection_database_result_rewards()
     try:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM result_rewards WHERE date BETWEEN %s AND %s, id = %s", (start_date, end_date, id))
+        cursor.execute("SELECT * FROM result_rewards WHERE date BETWEEN %s AND %s AND id = %s", (start_date, end_date, id))
         bonuses = cursor.fetchall()
         cursor.close()
         return bonuses
@@ -54,8 +54,10 @@ def add_information_result_rewards(id, motivation_bonus, start_date, end_date):
         # Создаем курсор
         cursor = connection.cursor()
         # SQL-запрос для вставки данных
-        total_sales = get_information_sales_volume(start_date, end_date, id)
-        base_salary = get_information_users(id)[0][4]
+        total_sales = get_information_sales_volume(id, start_date, end_date)
+        sales = get_information_users(id)
+        for sal in sales:
+            base_salary = sal[4]
         insert_query = """
         INSERT INTO result_rewards (id, total_sales, motivation_bonus, base_salary, start_date, end_date)
         VALUES (%s, %s, %s, %s, %s, %s);

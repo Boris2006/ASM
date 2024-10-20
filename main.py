@@ -34,8 +34,8 @@ def main():
     #add_information_sales(get_id_login_password('Boris')[0], 100, '11.30.2024', '001', '2')
     #add_information_sales(get_id_login_password('Boris')[0], 100, '11.01.2024', '001', '3')
     #show_results_sales(get_information_sales(get_id_login_password('Boris')[0], '11.01.2024'))
-    add_information_result_rewards(get_id_login_password('Boris')[0], '1000', '10.01.2024', '01.01.2025')
-    #(get_information_sales_volume(get_id_login_password('Boris')[0], '10.01.2024', '01.01.2025')
+    add_information_result_rewards(get_id_login_password('Boris')[0], 1000, '10.01.2024', '01.01.2025')
+    #print(get_information_sales_volume(get_id_login_password('Boris')[0], '10.01.2024', '01.01.2025'))
 
 
 if __name__ == "__main__":
