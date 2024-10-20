@@ -37,7 +37,7 @@ def get_information_sales_volume(id, start_date, end_date):
         print(f"Ошибка при выполнении запроса: {e}")
         return False
 
-def get_information_result_rewards(start_date, end_date, id):
+def get_information_result_rewards(id, start_date, end_date):
     connection = connection_database_result_rewards()
     try:
         cursor = connection.cursor()
