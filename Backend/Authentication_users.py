@@ -5,7 +5,7 @@ from flask_httpauth import HTTPBasicAuth
 app = Flask(__name__)
 auth = HTTPBasicAuth()
 
-def connection_database_login_password():
+def connection_database_login_password(): #worked
     try:
         # Замените эти параметры на ваши данные подключения
         connection = psycopg2.connect(
@@ -16,13 +16,14 @@ def connection_database_login_password():
             port="5432"
         )
 
-        print("Соединение успешно установлено")
+        #print("Соединение успешно установлено")
         return connection
     except Exception as e:
-        print("Ошибка при подключении к базе данных:", e)
+        #print("Ошибка при подключении к базе данных:", e)
+        return False
 
 
-def add_information_login_password(login, password):
+def add_information_login_password(login, password): #worked
     connection = connection_database_login_password()
     try:
         # Создаем курсор
@@ -44,7 +45,7 @@ def add_information_login_password(login, password):
         return False
 
 
-def get_information_login_password(login):
+def get_information_login_password(login): #worked
     connection = connection_database_login_password()
     try:
         cursor = connection.cursor()
@@ -53,15 +54,17 @@ def get_information_login_password(login):
         cursor.close()
         return user
     except Exception as e:
-        print(f"Ошибка при выполнении запроса: {e}")
-
+        #print(f"Ошибка при выполнении запроса: {e}")
+        return False
 
 @auth.verify_password
-def verify_password(login, password):
+def verify_password(login, password): #worked
     login_password = get_information_login_password(login)
     for l_p in login_password:
         if login == l_p[1] and l_p[2] == password:
             return login
+        else:
+            return False
 
 if __name__ == '__main__':
     app.run(debug=True)
