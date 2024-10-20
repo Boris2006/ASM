@@ -13,10 +13,10 @@ def connection_database_users(): #worked
             port="5432"
         )
 
-        print("Соединение успешно установлено")
+        #print("Соединение успешно установлено")
         return connection
     except Exception as e:
-        print("Ошибка при подключении к базе данных:", e)
+        #print("Ошибка при подключении к базе данных:", e)
         return False
 
 
@@ -29,7 +29,7 @@ def get_id_login_password(login): #worked
         cursor.close()
         return users
     except Exception as e:
-        print(f"Ошибка при выполнении запроса: {e}")
+        #print(f"Ошибка при выполнении запроса: {e}")
         return False
 
 
@@ -49,10 +49,10 @@ def add_information_users(id, name, email, role, salary): #worked
         connection.commit()
         # Закрываем курсор
         cursor.close()
-        print("Запись успешно добавлена.")
+        #print("Запись успешно добавлена.")
         return True
     except Exception as e:
-        print(f"Ошибка при выполнении запроса: {e}")
+        #print(f"Ошибка при выполнении запроса: {e}")
         connection.rollback()  # Откат изменений в случае ошибки
         return False
 
@@ -65,7 +65,7 @@ def get_information_users(id): #worked
         cursor.close()
         return user
     except Exception as e:
-        print(f"Ошибка при выполнении запроса: {e}")
+        #print(f"Ошибка при выполнении запроса: {e}")
         return False
 
 def show_results_users(users): #worked

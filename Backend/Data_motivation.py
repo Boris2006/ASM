@@ -4,7 +4,7 @@ def connection_database_users():
     try:
         # Замените эти параметры на ваши данные подключения
         connection = psycopg2.connect(
-            dbname="motivation_criteria",
+            dbname="ASM",
             user="borisgostev",
             password="",
             host="localhost",
