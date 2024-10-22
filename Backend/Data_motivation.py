@@ -1,5 +1,7 @@
 import psycopg2
 
+from Backend.Data_users import connection_database_users
+
 def connection_database_motivation(): #worked
     try:
         # Замените эти параметры на ваши данные подключения
@@ -17,40 +19,40 @@ def connection_database_motivation(): #worked
         print("Ошибка при подключении к базе данных:", e)
         return False
 
-def add_information_motivation(id, sales_volume, closed_deals, retention_level, start_date, end_date): #worked
-    connection = connection_database_motivation()
+def add_information_motivation(sales_volume, closed_deals, retention_level, start_date, end_date):
+    connection = connection_database_users()
     try:
-        # Создаем курсор
         cursor = connection.cursor()
-        # SQL-запрос для вставки данных
-        insert_query = """
-        INSERT INTO motivation_criteria (id, sales_volume, closed_deals, retention_level, start_date, end_date)
-        VALUES (%s, %s, %s, %s, %s, %s);
+        query = """
+        INSERT INTO motivation_criteria (sales_volume, closed_deals, retention_level, start_date, end_date)
+        VALUES (%s, %s, %s, %s, %s)
         """
-        # Выполняем запрос с передачей параметров
-        cursor.execute(insert_query, (id, sales_volume, closed_deals, retention_level, start_date, end_date,))
-        # Зафиксировать изменения в базе данных
+        cursor.execute(query, (sales_volume, closed_deals, retention_level, start_date, end_date))
         connection.commit()
-        # Закрываем курсор
-        cursor.close()
-        print("Запись успешно добавлена.")
         return True
     except Exception as e:
-        print(f"Ошибка при выполнении запроса: {e}")
-        connection.rollback()  # Откат изменений в случае ошибки
+        print(f"Ошибка при добавлении информации о критериях мотивации: {e}")
+        connection.rollback()
         return False
+    finally:
+        connection.close()
 
-def get_information_motivation(id): #worked
-    connection = connection_database_motivation()
+def get_information_motivation(start_date, end_date):
+    connection = connection_database_users()
     try:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM motivation_criteria WHERE id = %s", (id,))
-        user = cursor.fetchall()
-        cursor.close()
-        return user
+        query = """
+        SELECT * FROM motivation_criteria
+        WHERE start_date <= %s AND end_date >= %s
+        ORDER BY id DESC LIMIT 1
+        """
+        cursor.execute(query, (start_date, end_date))
+        return cursor.fetchone()
     except Exception as e:
-        print(f"Ошибка при выполнении запроса: {e}")
-        return False
+        print(f"Ошибка при получении информации о критериях мотивации: {e}")
+        return None
+    finally:
+        connection.close()
 
 def show_results_motivation(users): #worked
     for user in users:
