@@ -1,5 +1,7 @@
 import psycopg2
 
+from Backend.Data_users import connection_database_users
+
 
 
 def connection_database_sales(): #worked
@@ -20,40 +22,40 @@ def connection_database_sales(): #worked
         return False
 
 
-def get_information_sales(id, date): #worked
-    connection = connection_database_sales()
+def get_information_sales(user_id, start_date, end_date):
+    connection = connection_database_users()
     try:
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM sales WHERE id = %s AND date = %s;", (id, date,))
-        sales = cursor.fetchall()
-        cursor.close()
-        return sales
-    except Exception as e:
-        #print(f"Ошибка при выполнении запроса: {e}")
-        return False
-
-
-def add_information_sales(id, amount, date, id_product, status): #worked
-    connection = connection_database_sales()
-    try:
-        # Создаем курсор
-        cursor = connection.cursor()
-        # SQL-запрос для вставки данных
-        insert_query = """
-        INSERT INTO sales (id, amount, date, id_product, status)
-        VALUES (%s, %s, %s, %s, %s);
+        query = """
+        SELECT * FROM sales
+        WHERE id = %s AND date BETWEEN %s AND %s
         """
-        # Выполняем запрос с передачей параметров
-        cursor.execute(insert_query, (id, amount, date, id_product, status))
-        # Зафиксировать изменения в базе данных
-        connection.commit()
-        # Закрываем курсор
-        cursor.close()
-        #print("Запись успешно добавлена.")
+        cursor.execute(query, (user_id, start_date, end_date))
+        return cursor.fetchall()
     except Exception as e:
-        #print(f"Ошибка при выполнении запроса: {e}")
-        connection.rollback()  # Откат изменений в случае ошибки
+        print(f"Ошибка при получении информации о продажах: {e}")
+        return []
+    finally:
+        connection.close()
+
+
+def add_information_sales(user_id, amount, date, product_id, quantity):
+    connection = connection_database_users()
+    try:
+        cursor = connection.cursor()
+        query = """
+        INSERT INTO sales (id, amount, date, id_product, status)
+        VALUES (%s, %s, %s, %s, %s)
+        """
+        cursor.execute(query, (user_id, amount, date, product_id, 'completed'))
+        connection.commit()
+        return True
+    except Exception as e:
+        print(f"Ошибка при добавлении информации о продаже: {e}")
+        connection.rollback()
         return False
+    finally:
+        connection.close()
 
 
 def show_results_sales(sales): #worked
