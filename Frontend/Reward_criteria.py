@@ -34,9 +34,12 @@ def reward_criteria(user_id, start_date, end_date):
             motivation_bonus = total_sales * 0.05  # 5% от общих продаж
             
             # Получаем базовую зарплату
-            salary_query = "SELECT salary FROM users WHERE id = %s"
-            cursor.execute(salary_query, (user_id,))
-            base_salary = cursor.fetchone()[0]
+            user_info = get_information_users(user_id)
+            if user_info:
+                base_salary = user_info[0][4]  # Предполагаем, что зарплата находится в пятом столбце
+            else:
+                print("Информация о пользователе не найдена")
+                return 0
             
             # Добавляем информацию о вознаграждении
             add_information_result_rewards(user_id, total_sales, motivation_bonus, base_salary, start_date, end_date)
@@ -80,7 +83,7 @@ def reward_criteria(user_id, start_date, end_date):
     retention_level = user_data[3]
 
     # Получаем информацию о продажах
-    total_sales = get_information_sales_volume(rewards_connection, user_id, start_date, end_date)
+    total_sales = get_information_sales_volume(user_id, start_date, end_date)
     total_sales_value = sum(sale[1] for sale in total_sales)  # Предполагаем, что значение продаж на втором месте
 
     # Логика расчета мотивационного бонуса
