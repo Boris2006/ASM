@@ -13,6 +13,7 @@ class PerformanceMonitoring:
             'type_client': type_client
         })
     
+    @staticmethod
     def get_employee_rating(start_date, end_date):
         connection = connection_database_users()
         try:
@@ -43,4 +44,3 @@ class PerformanceMonitoring:
             return []
         finally:
             connection.close()
-
