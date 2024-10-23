@@ -18,6 +18,7 @@ class ReportGenerator:
         # Анализ по количеству бонусов за год
         pass
 
+    @staticmethod
     def generate_report(start_date, end_date):
         connection = connection_database_users()
         try:
