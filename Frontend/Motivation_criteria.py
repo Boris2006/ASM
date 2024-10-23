@@ -16,6 +16,7 @@ class MotivationCriteria:
         self.start_date = start_date
         self.end_date = end_date
     
+    @staticmethod
     def set_criteria(sales_volume, closed_deals, retention_level, start_date, end_date):
         try:
             add_information_motivation(sales_volume, closed_deals, retention_level, start_date, end_date)
